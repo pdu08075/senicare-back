@@ -29,7 +29,7 @@ public class SmsProvider {
         this.from = from;
     }
 
-    public void sendMessage(String to, String authNumber) {
+    public boolean sendMessage(String to, String authNumber) {
 
         Message message = new Message();
         message.setFrom(from);
@@ -40,6 +40,9 @@ public class SmsProvider {
         SingleMessageSentResponse response = messageService.sendOne(request);
 
         System.out.println(response);
+
+        boolean resultStatus = response.getStatusCode().equals("2000");
+        return resultStatus;
 
     }
 

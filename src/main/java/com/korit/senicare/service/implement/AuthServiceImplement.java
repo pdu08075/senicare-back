@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.korit.senicare.common.util.AuthNumberCreator;
 import com.korit.senicare.dto.request.auth.IdCheckRequestDto;
+import com.korit.senicare.dto.request.auth.TelAuthCheckRequestDto;
 import com.korit.senicare.dto.request.auth.TelAuthRequestDto;
 import com.korit.senicare.dto.response.ResponseDto;
 import com.korit.senicare.entity.TelAuthNumberEntity;
@@ -32,6 +33,7 @@ public class AuthServiceImplement implements AuthService {
         String userId = dto.getUserId();
 
         try {
+
             boolean isExistedId = nurseRepository.existsById(userId);
             if (isExistedId) return ResponseDto.duplicatedUserId();
             
@@ -40,7 +42,6 @@ public class AuthServiceImplement implements AuthService {
             return ResponseDto.databaseError();
         }
 
-        // return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("SU", "Success"));      // -> 가독성과 유지보수성 향상을 위해 ResponseDto에 메서드를 만든 후 아래에 사용
         return ResponseDto.success();
 
     }
@@ -51,6 +52,7 @@ public class AuthServiceImplement implements AuthService {
         String telNumber = dto.getTelNumber();
 
         try {
+
             boolean isExistedTelNumber = nurseRepository.existsByTelNumber(telNumber);
             if (isExistedTelNumber) return ResponseDto.duplicatedTelNumber();
 
@@ -61,9 +63,11 @@ public class AuthServiceImplement implements AuthService {
 
         String authNumber = AuthNumberCreator.number4();
 
-        smsProvider.sendMessage(telNumber, authNumber);
+        boolean isSendSuccess = smsProvider.sendMessage(telNumber, authNumber);
+        if (!isSendSuccess) return ResponseDto.messageSendFail();
 
         try {
+
             TelAuthNumberEntity telAuthNumberEntity = new TelAuthNumberEntity(telNumber, authNumber);
             telAuthNumberRepository.save(telAuthNumberEntity);
         } catch (Exception exception) {
@@ -72,6 +76,26 @@ public class AuthServiceImplement implements AuthService {
         }
 
         return ResponseDto.success();
+    }
+
+    @Override
+    public ResponseEntity<ResponseDto> telAuthCheck(TelAuthCheckRequestDto dto) {
+        
+        String telNumber = dto.getTelNumber();
+        String authNumber = dto.getAuthNumber();
+
+        try {
+            
+            boolean isMatched = telAuthNumberRepository.existsByTelNumberAndAuthNumber(telNumber, authNumber);
+            if (!isMatched) return ResponseDto.telAuthFail();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return ResponseDto.success();
+
     }
     
 }

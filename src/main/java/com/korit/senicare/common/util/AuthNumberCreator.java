@@ -9,7 +9,7 @@ public class AuthNumberCreator {
         String authNumber = "";
         
         Random random = new Random();
-        for ( int i = 0; i < 5; i ++)
+        for ( int i = 0; i < 4; i ++)
         authNumber += random.nextInt(10);
         
         return authNumber;
