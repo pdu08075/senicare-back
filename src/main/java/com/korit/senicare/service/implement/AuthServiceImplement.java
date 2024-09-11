@@ -1,12 +1,17 @@
 package com.korit.senicare.service.implement;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import com.korit.senicare.dto.request.IdCheckRequestDto;
+import com.korit.senicare.common.util.AuthNumberCreator;
+import com.korit.senicare.dto.request.auth.IdCheckRequestDto;
+import com.korit.senicare.dto.request.auth.TelAuthRequestDto;
 import com.korit.senicare.dto.response.ResponseDto;
+import com.korit.senicare.entity.TelAuthNumberEntity;
 import com.korit.senicare.repository.NurseRepository;
+import com.korit.senicare.repository.TelAuthNumberRepository;
 import com.korit.senicare.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthServiceImplement implements AuthService {
 
     private final NurseRepository nurseRepository;
+    private final TelAuthNumberRepository telAuthNumberRepository;
     
     @Override
     public ResponseEntity<ResponseDto> idCheck(IdCheckRequestDto dto) {
@@ -34,6 +40,33 @@ public class AuthServiceImplement implements AuthService {
         // return ResponseEntity.status(HttpStatus.OK).body(new ResponseDto("SU", "Success"));      // -> 가독성과 유지보수성 향상을 위해 ResponseDto에 메서드를 만든 후 아래에 사용
         return ResponseDto.success();
 
+    }
+
+    @Override
+    public ResponseEntity<ResponseDto> telAuth(TelAuthRequestDto dto) {
+        
+        String telNumber = dto.getTelNumber();
+
+        try {
+            boolean isExistedTelNumber = nurseRepository.existsByTelNumber(telNumber);
+            if (isExistedTelNumber) return ResponseDto.duplicatedTelNumber();
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        String authNumber = AuthNumberCreator.number4();
+
+        try {
+            TelAuthNumberEntity telAuthNumberEntity = new TelAuthNumberEntity(telNumber, authNumber);
+            telAuthNumberRepository.save(telAuthNumberEntity);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return ResponseDto.databaseError();
+        }
+
+        return ResponseDto.success();
     }
     
 }

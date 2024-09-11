@@ -1,4 +1,4 @@
-package com.korit.senicare.dto.request;
+package com.korit.senicare.dto.request.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
