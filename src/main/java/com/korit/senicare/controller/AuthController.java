@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.korit.senicare.dto.request.IdCheckRequestDto;
+import com.korit.senicare.dto.request.auth.IdCheckRequestDto;
 import com.korit.senicare.dto.response.ResponseDto;
 import com.korit.senicare.service.AuthService;
 
