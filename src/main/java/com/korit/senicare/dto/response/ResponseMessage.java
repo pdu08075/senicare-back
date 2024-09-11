@@ -4,10 +4,12 @@ package com.korit.senicare.dto.response;
 
 public interface ResponseMessage {
 
-    String SUCCESS = "Success";
+    String SUCCESS = "Success.";
 
-    String DUPLICATED_USER_ID = "Duplicated user id";
+    String VALIDATION_FAIL = "Validation failed.";
 
-    String DATABASE_ERROR = "Database error";
+    String DUPLICATED_USER_ID = "Duplicated user id.";
+
+    String DATABASE_ERROR = "Database error.";
 
 }
