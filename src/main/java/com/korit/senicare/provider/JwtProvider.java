@@ -1,7 +1,6 @@
 package com.korit.senicare.provider;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Jwts;

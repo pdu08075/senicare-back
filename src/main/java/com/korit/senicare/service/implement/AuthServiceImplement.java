@@ -1,7 +1,5 @@
 package com.korit.senicare.service.implement;
 
-import org.apache.catalina.connector.Response;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,11 +15,11 @@ import com.korit.senicare.dto.response.ResponseDto;
 import com.korit.senicare.dto.response.auth.SignInResponseDto;
 import com.korit.senicare.entity.NurseEntity;
 import com.korit.senicare.entity.TelAuthNumberEntity;
+import com.korit.senicare.provider.JwtProvider;
 import com.korit.senicare.provider.SmsProvider;
 import com.korit.senicare.repository.NurseRepository;
 import com.korit.senicare.repository.TelAuthNumberRepository;
 import com.korit.senicare.service.AuthService;
-import java.lang.String;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthServiceImplement implements AuthService {
 
     private final SmsProvider smsProvider;
+    private final JwtProvider jwtProvider;
 
     private final NurseRepository nurseRepository;
     private final TelAuthNumberRepository telAuthNumberRepository;
@@ -146,15 +145,29 @@ public class AuthServiceImplement implements AuthService {
     public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto dto) {
 
         String userId = dto.getUserId();
+        String password = dto.getPassword();        // 평문의 password를 Dto로 부터 꺼내옴
+
+        String accessToken = null;
 
         try {
             
             NurseEntity nurseEntity = nurseRepository.findByUserId(userId);
             if (nurseEntity == null) return ResponseDto.signInFail();
 
+            String encodedPassword = nurseEntity.getPassword();         // nurses에 있는 암호화된 password를 꺼내옴
+            boolean isMached = passwordEncoder.matches(password, encodedPassword);      // 암호화된 password가 평문의 password로부터 만들어진 것이라면 true
+            if (!isMached) return ResponseDto.signInFail();     // 위가 false라면 로그인 실패 반환
+
+            accessToken = jwtProvider.create(userId);
+            if (accessToken == null) return ResponseDto.tokenCreateFail(); 
+
         } catch (Exception exception) {
             exception.printStackTrace();
             return ResponseDto.databaseError();
         }
+
+        return SignInResponseDto.success(accessToken);
+
+    }
     
 }
