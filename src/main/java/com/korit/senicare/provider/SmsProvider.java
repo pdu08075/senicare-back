@@ -3,7 +3,6 @@ package com.korit.senicare.provider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
@@ -11,7 +10,6 @@ import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 
 // Cool SMS 메세지 전송 제공자
-// @RequiredArgsConstructor
 @Component
 public class SmsProvider {
     

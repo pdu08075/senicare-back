@@ -21,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 // - 비밀키 환경변수에 있는 jwt.secret
 // - JWT 만료기간 10시간
 
-@Component  // 인스턴스 생성 권한을 sping.ioc에 넘겨버림
+@Component
 public class JwtProvider {
     
     @Value("${jwt.secret}")      // application.properties에 있는 비밀키 불러옴
