@@ -15,6 +15,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.korit.senicare.filter.JwtAuthenticationFilter;
+import com.korit.senicare.handler.OAuth2SuccessHandler;
+import com.korit.senicare.service.implement.OAuth2UserServiceImplement;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,7 +27,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final OAuth2UserServiceImplement oAuth2UserService;
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity security) throws Exception {
@@ -43,9 +47,16 @@ public class WebSecurityConfig {
             .cors(cors -> cors.configurationSource(configurationSource()))         // restAPI가 아니라 html이라면 모든 요청이 같은 출처에서 전송될 것이기에 사용할 필요 없으나, restAPI 사용 예정이므로 어떤 url에서 전송하는지 받을 수 있도록 함
             // URL 패턴 및 HTTP 메서드에 따라 인증 및 인가 여부 지정
             .authorizeHttpRequests(request -> request
-                .requestMatchers("/api/v1/auth/**", "/").permitAll()
+                .requestMatchers("/api/v1/auth/**", "/oauth2/callback/*", "/").permitAll()
                 .anyRequest().authenticated()
             )
+            // oAuth2 로그인 적용
+            .oauth2Login(oauth2 -> oauth2
+                .redirectionEndpoint(endpoint -> endpoint.baseUri("/oauth2/callback/*"))
+                .authorizationEndpoint(endpoint -> endpoint.baseUri("/api/v1/auth/sns-sign-in"))
+                .userInfoEndpoint(endpoint -> endpoint.userService(oAuth2UserService))
+                .successHandler(oAuth2SuccessHandler)
+                )
             // 필터 등록
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
