@@ -33,6 +33,10 @@ public class ResponseDto {
         ResponseDto responseBody = new ResponseDto(ResponseCode.DUPLICATED_TEL_NUMBER, ResponseMessage.DUPLICATED_TEL_NUMBER);
         return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
     }
+    public static ResponseEntity<ResponseDto> noExistUserId() {
+        ResponseDto responseBody = new ResponseDto(ResponseCode.NO_EXIST_USER_ID, ResponseMessage.NO_EXIST_USER_ID);
+        return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+    }
 
     public static ResponseEntity<ResponseDto> telAuthFail() {
         ResponseDto responseBody = new ResponseDto(ResponseCode.TEL_AUTH_FAIL, ResponseMessage.TEL_AUTH_FAIL);
