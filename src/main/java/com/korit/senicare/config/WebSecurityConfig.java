@@ -55,7 +55,7 @@ public class WebSecurityConfig {
             .cors(cors -> cors.configurationSource(configurationSource()))         // restAPI가 아니라 html이라면 모든 요청이 같은 출처에서 전송될 것이기에 사용할 필요 없으나, restAPI 사용 예정이므로 어떤 url에서 전송하는지 받을 수 있도록 함
             // URL 패턴 및 HTTP 메서드에 따라 인증 및 인가 여부 지정
             .authorizeHttpRequests(request -> request
-                .requestMatchers("/api/v1/auth/**", "/oauth2/callback/*", "/").permitAll()
+                .requestMatchers("/api/v1/auth/**", "/oauth2/callback/*", "/file/*", "/").permitAll()       // "/file/*" 추가 작성 안 해주면 파일 post 할 때 AF 에러
                 .anyRequest().authenticated()
             )
             // 인증 및 인가 작업 중 발생하는 예외 처리
