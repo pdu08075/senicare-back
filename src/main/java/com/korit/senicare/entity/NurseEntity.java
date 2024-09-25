@@ -14,8 +14,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "nurses")
-@Table(name = "nurses")
+@Entity(name="nurses")
+@Table(name="nurses")
 public class NurseEntity {
     
     @Id
@@ -34,4 +34,5 @@ public class NurseEntity {
         this.joinPath = dto.getJoinPath();
         this.snsId = dto.getSnsId();
     }
+
 }
