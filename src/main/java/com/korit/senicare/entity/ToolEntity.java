@@ -40,4 +40,8 @@ public class ToolEntity {
         this.count = dto.getCount();
     }
 
+    public void decreaseCount(Integer usedCount) {
+        this.count -= usedCount;        // 복합개인연산자: 원래 있던 count에서 usedCount를 빼서 다시 count에 집어 넣음
+    }
+
 }

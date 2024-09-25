@@ -2,6 +2,7 @@ package com.korit.senicare.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.korit.senicare.dto.request.customer.PatchCustomerRequestDto;
+import com.korit.senicare.dto.request.customer.PostCareRecordRequestDto;
 import com.korit.senicare.dto.request.customer.PostCustomerRequestDto;
 import com.korit.senicare.dto.response.ResponseDto;
 import com.korit.senicare.dto.response.customer.GetCustomerListResponseDto;
@@ -50,13 +52,39 @@ public class CustomerController {
         return response;
     }
 
-    @PatchMapping(value = {"/{cutomerNumber}"})
+    @PatchMapping(value = {"/{customerNumber}"})
     public ResponseEntity<ResponseDto> patchCustomer(
-    @RequestBody @Valid PatchCustomerRequestDto requestBody,
-    @PathVariable("customerNumber") Integer customerNumber,
-    @AuthenticationPrincipal String userId
+        @RequestBody @Valid PatchCustomerRequestDto requestBody,
+        @PathVariable("customerNumber") Integer customerNumber,
+        @AuthenticationPrincipal String userId
     ) {
         ResponseEntity<ResponseDto> response = customerService.patchCustomer(requestBody, customerNumber, userId);
+        return response;
+    }
+
+    @DeleteMapping("/{customerNumber}")
+    public ResponseEntity<ResponseDto> deleteCustomer(
+        @PathVariable("customerNumber") Integer customerNumber,
+        @AuthenticationPrincipal String userId
+    ) {
+        ResponseEntity<ResponseDto> response = customerService.deleteCustomer(customerNumber, userId);
+        return response;
+    }
+
+    @PostMapping("/{customerNumber}/care-record")
+    public ResponseEntity<ResponseDto> postCareRecord(
+        @RequestBody @Valid PostCareRecordRequestDto requestBody,
+        @PathVariable("customerNumber") Integer customerNumber,
+        @AuthenticationPrincipal String userId
+    ) {
+        Integer usedToolNumber = requestBody.getUsedToolNumber();
+        Integer count = requestBody.getCount();
+        if (
+            (usedToolNumber != null && count == null) ||
+            (usedToolNumber == null && count != null)
+        ) return ResponseDto.validationFail();
+
+        ResponseEntity<ResponseDto> response = customerService.postCareRecord(requestBody, customerNumber, userId);
         return response;
     }
 

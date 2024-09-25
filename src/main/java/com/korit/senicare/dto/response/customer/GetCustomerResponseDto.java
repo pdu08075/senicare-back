@@ -29,6 +29,7 @@ public class GetCustomerResponseDto extends ResponseDto {
         this.birth = resultSet.getBirth();
         this.chargerName = resultSet.getChargerName();
         this.chargerId = resultSet.getChargerId();
+        this.address = resultSet.getAddress();
     }
 
     public static ResponseEntity<GetCustomerResponseDto> success(GetCustomerResultSet resultSet) {
