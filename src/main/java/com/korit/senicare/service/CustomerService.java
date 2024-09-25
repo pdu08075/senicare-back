@@ -8,6 +8,7 @@ import com.korit.senicare.dto.request.customer.PostCustomerRequestDto;
 import com.korit.senicare.dto.response.ResponseDto;
 import com.korit.senicare.dto.response.customer.GetCustomerListResponseDto;
 import com.korit.senicare.dto.response.customer.GetCustomerResponseDto;
+import com.korit.senicare.dto.response.customer.GetCareRecordListResponseDto;
 
 public interface CustomerService {
     
@@ -17,5 +18,6 @@ public interface CustomerService {
     ResponseEntity<ResponseDto> patchCustomer(PatchCustomerRequestDto dto, Integer customerNumber, String userId);
     ResponseEntity<ResponseDto> deleteCustomer(Integer customerNumber, String userId);
     ResponseEntity<ResponseDto> postCareRecord(PostCareRecordRequestDto dto, Integer CustomerNumber, String userId);
+    ResponseEntity<? super GetCareRecordListResponseDto> getCareRecordList(Integer customerNumber);
 
 }

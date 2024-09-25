@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.ArrayList;
-
 import com.korit.senicare.common.object.CareRecord;
 import com.korit.senicare.dto.response.ResponseCode;
 import com.korit.senicare.dto.response.ResponseDto;
