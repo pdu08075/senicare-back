@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 import com.korit.senicare.entity.CareRecordEntity;
-import com.korit.senicare.repository.resultSet.GetCustomersResultSet;
 
 import lombok.Getter;
 
