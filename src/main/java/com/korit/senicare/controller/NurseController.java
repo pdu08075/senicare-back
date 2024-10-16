@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.korit.senicare.dto.request.nurse.PatchNurseRequestDto;
 import com.korit.senicare.dto.response.ResponseDto;
 import com.korit.senicare.dto.response.nurse.GetChargedCustomerResponseDto;
-import com.korit.senicare.dto.response.nurse.GetChargedCustomerResponseDto;
 import com.korit.senicare.dto.response.nurse.GetNurseListResponseDto;
 import com.korit.senicare.dto.response.nurse.GetNurseResponseDto;
 import com.korit.senicare.dto.response.nurse.GetSignInResponseDto;
